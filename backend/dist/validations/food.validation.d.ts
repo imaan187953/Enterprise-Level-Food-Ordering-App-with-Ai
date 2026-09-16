@@ -1,0 +1,42 @@
+import { z } from "zod";
+export declare const createFoodSchema: z.ZodObject<{
+    name: z.ZodString;
+    slug: z.ZodString;
+    description: z.ZodString;
+    price: z.ZodNumber;
+    discountPrice: z.ZodOptional<z.ZodNumber>;
+    category: z.ZodString;
+    image: z.ZodOptional<z.ZodString>;
+    ingredients: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    allergens: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    isVegetarian: z.ZodOptional<z.ZodBoolean>;
+    isSpicy: z.ZodOptional<z.ZodBoolean>;
+    preparationTime: z.ZodNumber;
+    isAvailable: z.ZodOptional<z.ZodBoolean>;
+    isFeatured: z.ZodOptional<z.ZodBoolean>;
+}, z.core.$strip>;
+export declare const updateFoodSchema: z.ZodObject<{
+    name: z.ZodOptional<z.ZodString>;
+    slug: z.ZodOptional<z.ZodString>;
+    description: z.ZodOptional<z.ZodString>;
+    price: z.ZodOptional<z.ZodNumber>;
+    discountPrice: z.ZodOptional<z.ZodNumber>;
+    category: z.ZodOptional<z.ZodString>;
+    image: z.ZodOptional<z.ZodString>;
+    ingredients: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    allergens: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    isVegetarian: z.ZodOptional<z.ZodBoolean>;
+    isSpicy: z.ZodOptional<z.ZodBoolean>;
+    preparationTime: z.ZodOptional<z.ZodNumber>;
+    isAvailable: z.ZodOptional<z.ZodBoolean>;
+    isFeatured: z.ZodOptional<z.ZodBoolean>;
+    isActive: z.ZodOptional<z.ZodBoolean>;
+}, z.core.$strip>;
+export declare const updateFoodStatusSchema: z.ZodObject<{
+    isAvailable: z.ZodOptional<z.ZodBoolean>;
+    isFeatured: z.ZodOptional<z.ZodBoolean>;
+    isActive: z.ZodOptional<z.ZodBoolean>;
+}, z.core.$strip>;
+export type CreateFoodValidationInput = z.infer<typeof createFoodSchema>;
+export type UpdateFoodValidationInput = z.infer<typeof updateFoodSchema>;
+export type UpdateFoodStatusValidationInput = z.infer<typeof updateFoodStatusSchema>;
