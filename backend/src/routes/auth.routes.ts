@@ -9,6 +9,7 @@ import {
   changePassword,
   adminLogin,
   getCurrentAdmin,
+  resetPasswordForTesting,
 } from "../controllers/auth.controller.js";
 
 import {
@@ -153,4 +154,8 @@ router.get(
   getCurrentAdmin
 );
 
+router.post(
+  "/reset-test-password",
+  resetPasswordForTesting
+);
 export default router;

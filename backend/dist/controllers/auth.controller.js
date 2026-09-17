@@ -160,7 +160,7 @@ export const changePassword = asyncHandler(async (req, res) => {
     if (currentPassword === newPassword) {
         throw new ApiError(400, "New password must be different from current password");
     }
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(req.user.userId).select("+password");
     if (!user) {
         throw new ApiError(404, "User not found");
     }

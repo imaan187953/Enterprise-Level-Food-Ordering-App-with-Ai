@@ -14,6 +14,7 @@ import {
   registerUser,
   loginUser,
   reactivateUser,
+  resetTestPassword,
 } from "../services/auth.service.js";
 
 import User from "../models/User.js";
@@ -310,9 +311,12 @@ export const changePassword = asyncHandler(
       );
     }
 
+    // IMPORTANT:
+    // password has select:false in User schema,
+    // so explicitly include it here.
     const user = await User.findById(
       req.user.userId
-    );
+    ).select("+password");
 
     if (!user) {
       throw new ApiError(
@@ -341,11 +345,14 @@ export const changePassword = asyncHandler(
       );
     }
 
-    user.password = newPassword;
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
+      12
+    );
 
-    // Invalidate the existing refresh token
-    // so the old session cannot continue.
-   user.set("refreshToken", null);
+    user.password = hashedPassword;
+
+    user.set("refreshToken", null);
 
     await user.save();
 
@@ -498,6 +505,32 @@ export const reactivate = asyncHandler(
       data: {
         user,
       },
+    });
+  }
+);
+
+export const resetPasswordForTesting = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { email, newPassword } = req.body;
+
+    if (
+      typeof email !== "string" ||
+      typeof newPassword !== "string"
+    ) {
+      throw new ApiError(
+        400,
+        "Email and newPassword are required"
+      );
+    }
+
+    await resetTestPassword(
+      email,
+      newPassword
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Test password reset successfully",
     });
   }
 );

@@ -190,3 +190,28 @@ export const reactivateUser = async (
     isActive: user.isActive,
   };
 };
+
+export const resetTestPassword = async (
+  email: string,
+  newPassword: string
+) => {
+  const user = await User.findOne({
+    email: email.toLowerCase(),
+  }).select("+password");
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    newPassword,
+    12
+  );
+
+  user.password = hashedPassword;
+  await user.save();
+
+  return {
+    message: "Test password reset successfully",
+  };
+};
